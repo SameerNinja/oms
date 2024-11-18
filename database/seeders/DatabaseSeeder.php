@@ -20,8 +20,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
                 //UserSeeder::class,
-            CategorySeeder::class,
-            UnitSeeder::class,
             ProductSeeder::class
         ]);
 
@@ -31,29 +29,11 @@ class DatabaseSeeder extends Seeder
             ->create();
 
 
-        $purchases = Purchase::factory(60)->create();
-
-        $users = User::factory(10)
-            ->recycle($purchases)
-            ->create();
-
+        $users = User::factory(10)->create();
         $admin = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@admin.com'
         ]);
-
-        /*
-        for ($i=0; $i < 10; $i++) {
-            Product::factory()->create([
-                'product_code' => IdGenerator::generate([
-                    'table' => 'products',
-                    'field' => 'product_code',
-                    'length' => 4,
-                    'prefix' => 'PC'
-                ]),
-            ]);
-        }
-        */
 
     }
 }

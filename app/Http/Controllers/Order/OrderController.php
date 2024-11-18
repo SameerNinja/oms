@@ -27,13 +27,12 @@ class OrderController extends Controller
 
     public function create()
     {
-        Cart::instance('order')
-            ->destroy();
+        Cart::instance('order')->destroy();
 
         return view('orders.create', [
             'carts' => Cart::content(),
             'customers' => Customer::all(['id', 'name']),
-            'products' => Product::with(['category', 'unit'])->get(),
+            'products' => Product::all(),
         ]);
     }
 

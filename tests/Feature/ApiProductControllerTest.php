@@ -2,9 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
 use App\Models\Product;
-use App\Models\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,24 +38,6 @@ class ApiProductControllerTest extends TestCase
     {
         return Product::factory()->create([
             'name' => 'Test Product',
-            'category_id' => $this->createCategory(),
-            'unit_id' => $this->createUnit()
         ]);
     }
-
-    public function createCategory()
-    {
-        return Category::factory()->create([
-            'name' => 'Speakers'
-        ]);
-    }
-
-    public function createUnit()
-    {
-        return Unit::factory()->create([
-            'name' => 'piece'
-        ]);
-    }
-
-
 }

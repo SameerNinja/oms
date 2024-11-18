@@ -33,31 +33,10 @@ abstract class TestCase extends BaseTestCase
         ]);
     }
 
-    protected function createCategory()
-    {
-        return Category::factory()->create([
-            'name' => 'Speakers'
-        ]);
-    }
-
-    protected function createUnit()
-    {
-        return Unit::factory()->create([
-            'name' => 'piece'
-        ]);
-    }
-
     public function createCustomer()
     {
         return Customer::factory()->create([
             'name' => 'Customer 1'
-        ]);
-    }
-
-    public function createSupplier()
-    {
-        return Supplier::create([
-            'name' => 'Thomann'
         ]);
     }
 }

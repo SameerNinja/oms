@@ -20,13 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('buying_price')->comment('Buying Price');
             $table->text('notes')->nullable();
-
             $table->string('product_image')->nullable();
-
-            $table->foreignIdFor(\App\Models\Category::class)
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
 
             $table->timestamps();
         });
