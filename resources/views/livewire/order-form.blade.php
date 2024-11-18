@@ -123,26 +123,18 @@
             </tr>
             <tr>
                 <th colspan="4" class="align-middle text-end">
-                    Subtotal
+                    Discount
                 </th>
                 <td class="text-center">
-{{--                    ${{ number_format($subtotal, 2) }}--}}
-                    {{ Number::currency($subtotal, 'EUR') }}
+                    {{ Number::currency($discount, 'EUR') }}
                 </td>
             </tr>
             <tr>
                 <th colspan="4" class="align-middle text-end">
-                    Taxes
+                    Subtotal
                 </th>
-                <td width="150" class="align-middle text-center">
-                    <input wire:model.blur="taxes" type="number" id="taxes" class="form-control w-75 d-inline" min="0" max="100">
-                    %
-
-                    @error('taxes')
-                    <em class="invalid-feedback">
-                        {{ $message }}
-                    </em>
-                    @enderror
+                <td class="text-center">
+                    {{ Number::currency($subtotal, 'EUR') }}
                 </td>
             </tr>
             <tr>

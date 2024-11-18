@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -28,8 +29,6 @@ class OrderForm extends Component
         $this->cart_instance = $cartInstance;
 
         $this->allProducts = Product::all();
-
-        //$cart_items = Cart::instance($this->cart_instance)->content();
     }
 
     public function render(): View
@@ -44,11 +43,40 @@ class OrderForm extends Component
 
         $cart_items = Cart::instance($this->cart_instance)->content();
 
+        $discount = $this->calculateDiscounts($total);
+
         return view('livewire.order-form', [
             'subtotal' => $total,
-            'total' => $total * (1 + (is_numeric($this->taxes) ? $this->taxes : 0) / 100),
+            'total' => $total - $discount + ($total * (1 + (is_numeric($this->taxes) ? $this->taxes : 0) / 100)),
+            'discount' => $discount,
             'cart_items' => $cart_items,
         ]);
+    }
+
+    public function calculateDiscounts($total): float
+    {
+        $discount = 0;
+
+        // Seasonal Discount: 15% off if current date is between December 20 and December 31
+        $currentDate = Carbon::now();
+        if ($currentDate->between(Carbon::createFromDate($currentDate->year, 12, 20), Carbon::createFromDate($currentDate->year, 12, 31))) {
+            $discount += $total * 0.15;  // 15% seasonal discount
+        }
+
+        // Volume-Based Discount: 10% off any item with more than 10 units
+        $cart = Cart::instance($this->cart_instance)->content();
+        foreach ($cart as $cartItem) {
+            if ($cartItem->qty > 10) {
+                $discount += $cartItem->price * $cartItem->qty * 0.10; // 10% discount per item with more than 10 units
+            }
+        }
+
+        // Loyalty Discount: 5% off the total if the customer has placed more than 5 orders
+        // if ($this->customer && $this->customer->orders->count() > 5) {
+        //     $discount += $total * 0.05;  // 5% loyalty discount
+        // }
+
+        return $discount;
     }
 
     public function addProduct(): void
