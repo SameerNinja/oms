@@ -89,10 +89,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                {{ $users }} Users
-                                            </div>
-                                            <div class="text-muted">
-                                                {{ $completedOrders }} {{ __('completed') }}
+                                                {{ $customers }} Customers
                                             </div>
                                         </div>
                                     </div>

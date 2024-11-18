@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboards;
 
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -18,13 +19,13 @@ class DashboardController extends Controller
 
         $products = Product::count();
 
-        $users = User::count();
+        $customers = Customer::count();
 
         return view('dashboard', [
             'products' => $products,
             'orders' => $orders,
             'completedOrders' => $completedOrders,
-            'users' => $users,
+            'customers' => $customers,
         ]);
     }
 }
