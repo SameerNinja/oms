@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\V1\CustomerController;
+use App\Http\Controllers\API\V1\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\ProductController;
@@ -19,4 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('products/', [ProductController::class, 'index'])->name('api.product.index');
+Route::get('products', [ProductController::class, 'index'])->name('api.product.index');
+Route::get('customer', [CustomerController::class, 'index'])->name('api.customer.index');
+Route::post('order/create', [OrderController::class, 'createOrder'])->name('api.create.order');
+Route::get('order/{orderId}', [OrderController::class, 'retrieveOrder'])->name('api.create.order');

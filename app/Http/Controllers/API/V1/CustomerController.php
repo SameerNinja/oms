@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Models\Product;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
-class ProductController
+class CustomerController
 {
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 15);
-        $products = Product::paginate($perPage);
+        $customers = Customer::paginate($perPage);
 
-        return response()->json($products);
+        return response()->json($customers);
     }
 }
