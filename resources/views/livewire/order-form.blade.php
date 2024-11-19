@@ -6,6 +6,64 @@
     </div>
     @endsession
 
+    <div class="row gx-3 mb-3">
+        <div class="col-md-4">
+            <label for="date" class="form-label required">
+                {{ __('Order Date') }}
+            </label>
+
+            <input wire:model.live="orderDate" name="date" id="date" type="date"
+            class="form-control example-date-input @error('date') is-invalid @enderror"
+            value="{{ old('date') ?? now()->format('Y-m-d') }}" required
+    >
+
+
+            @error('date')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+
+        <div class="col-md-4">
+            <label for="person" class="form-label required">
+                Select a Person
+            </label>
+
+            <select wire:model.live.debounce.500ms="selectedPerson" class="form-select">
+                <option value="">Select a person</option>
+                @foreach($customers as $id => $customer)
+                    <option value="{{ $id }}" {{ $id == $selectedPerson ? 'selected' : '' }}
+                    >{{ $customer->name }}</option>
+                @endforeach
+            </select>
+
+            @error('selectedPerson')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+
+        <div class="col-md-4">
+            <label for="reference" class="form-label required">
+                {{ __('Reference') }}
+            </label>
+
+            <input type="text" class="form-control"
+                    id="reference"
+                    name="reference"
+                    value="ORDR"
+                    readonly
+            >
+
+            @error('reference')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
 
     <table class="table table-bordered" id="products_table">
         <thead class="thead-dark">

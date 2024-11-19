@@ -29,7 +29,7 @@
                             </div>
                             <div class="card-body">
 
-                                <div class="row gx-3 mb-3">
+                                {{-- <div class="row gx-3 mb-3">
                                     <div class="col-md-4">
                                         <label for="date" class="form-label required">
                                             {{ __('Order Date') }}
@@ -75,7 +75,7 @@
                                         </div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <livewire:order-form :cart-instance="'order'" />
                                 {{-- livewire:product-cart :cartInstance="'orders'"/>--}}

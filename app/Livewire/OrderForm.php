@@ -2,11 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Models\Customer;
 use App\Models\Product;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -24,22 +26,26 @@ class OrderForm extends Component
     #[Validate('required', message: 'Please select products')]
     public Collection $allProducts;
 
+    public $orderDate;
+
+    public $customers;
+
+    public $selectedPerson = null;
+
     public function mount($cartInstance): void
     {
         $this->cart_instance = $cartInstance;
 
         $this->allProducts = Product::all();
+
+        $this->orderDate = now()->format('Y-m-d');
+
+        $this->customers = Customer::all(['id', 'name']);
     }
 
     public function render(): View
     {
-        $total = 0;
-
-        foreach ($this->invoiceProducts as $invoiceProduct) {
-            if ($invoiceProduct['is_saved'] && $invoiceProduct['product_price'] && $invoiceProduct['quantity']) {
-                $total += $invoiceProduct['product_price'] * $invoiceProduct['quantity'];
-            }
-        }
+        $total = $this->getTotal();
 
         $cart_items = Cart::instance($this->cart_instance)->content();
 
@@ -53,13 +59,38 @@ class OrderForm extends Component
         ]);
     }
 
+    public function updatedOrderDate($value): void
+    {
+        $this->calculateDiscounts($this->getTotal());
+    }
+
+    public function updatedSelectedPerson($value): void
+    {
+        $this->calculateDiscounts($this->getTotal());
+    }
+
+    public function getTotal()
+    {
+        $total = 0;
+
+        foreach ($this->invoiceProducts as $invoiceProduct) {
+            if ($invoiceProduct['is_saved'] && $invoiceProduct['product_price'] && $invoiceProduct['quantity']) {
+                $total += $invoiceProduct['product_price'] * $invoiceProduct['quantity'];
+            }
+        }
+
+        return $total;
+    }
+
     public function calculateDiscounts($total): float
     {
         $discount = 0;
 
         // Seasonal Discount: 15% off if current date is between December 20 and December 31
-        $currentDate = Carbon::now();
-        if ($currentDate->between(Carbon::createFromDate($currentDate->year, 12, 20), Carbon::createFromDate($currentDate->year, 12, 31))) {
+        $orderDate = Carbon::parse($this->orderDate);
+
+        // Seasonal Discount: 15% off if the order date is between December 20 and December 31
+        if ($orderDate->between(Carbon::createFromDate($orderDate->year, 12, 20), Carbon::createFromDate($orderDate->year, 12, 31))) {
             $discount += $total * 0.15;  // 15% seasonal discount
         }
 
@@ -72,9 +103,13 @@ class OrderForm extends Component
         }
 
         // Loyalty Discount: 5% off the total if the customer has placed more than 5 orders
-        // if ($this->customer && $this->customer->orders->count() > 5) {
-        //     $discount += $total * 0.05;  // 5% loyalty discount
-        // }
+        if (!empty($this->selectedPerson)) {
+            $customer = Customer::query()->withCount('orders')->find($this->selectedPerson);
+            if ($customer->orders_count > 5) {
+                $discount += $total * 0.05;  // 5% loyalty discount
+            }
+        }
+
 
         return $discount;
     }
