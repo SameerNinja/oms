@@ -49,12 +49,15 @@ class OrderForm extends Component
 
         $cart_items = Cart::instance($this->cart_instance)->content();
 
-        $discount = $this->calculateDiscounts($total);
+        $discounts = $this->calculateDiscounts($total);
+
+        $discount = $discounts['total_discount'];
 
         return view('livewire.order-form', [
             'subtotal' => $total,
             'total' => $total - $discount + ($total * (1 + (is_numeric($this->taxes) ? $this->taxes : 0) / 100)),
             'discount' => $discount,
+            'discounts' => $discounts,  // Pass the individual discounts
             'cart_items' => $cart_items,
         ]);
     }
@@ -82,23 +85,26 @@ class OrderForm extends Component
         return $total;
     }
 
-    public function calculateDiscounts($total): float
+    public function calculateDiscounts($total)
     {
         $discount = 0;
+        $seasonalDiscount = 0;
+        $volumeDiscount = 0;
+        $loyaltyDiscount = 0;
 
         // Seasonal Discount: 15% off if current date is between December 20 and December 31
         $orderDate = Carbon::parse($this->orderDate);
-
-        // Seasonal Discount: 15% off if the order date is between December 20 and December 31
         if ($orderDate->between(Carbon::createFromDate($orderDate->year, 12, 20), Carbon::createFromDate($orderDate->year, 12, 31))) {
-            $discount += $total * 0.15;  // 15% seasonal discount
+            $seasonalDiscount = $total * 0.15;  // 15% seasonal discount
+            $discount += $seasonalDiscount;
         }
 
         // Volume-Based Discount: 10% off any item with more than 10 units
         $cart = Cart::instance($this->cart_instance)->content();
         foreach ($cart as $cartItem) {
             if ($cartItem->qty > 10) {
-                $discount += $cartItem->price * $cartItem->qty * 0.10; // 10% discount per item with more than 10 units
+                $volumeDiscount += $cartItem->price * $cartItem->qty * 0.10; // 10% discount per item with more than 10 units
+                $discount += $volumeDiscount;
             }
         }
 
@@ -106,12 +112,18 @@ class OrderForm extends Component
         if (!empty($this->selectedPerson)) {
             $customer = Customer::query()->withCount('orders')->find($this->selectedPerson);
             if ($customer->orders_count > 5) {
-                $discount += $total * 0.05;  // 5% loyalty discount
+                $loyaltyDiscount = $total * 0.05;  // 5% loyalty discount
+                $discount += $loyaltyDiscount;
             }
         }
 
-
-        return $discount;
+        // Return total discount and the individual discounts for display
+        return [
+            'total_discount' => $discount,
+            'seasonal_discount' => $seasonalDiscount,
+            'volume_discount' => $volumeDiscount,
+            'loyalty_discount' => $loyaltyDiscount,
+        ];
     }
 
     public function addProduct(): void

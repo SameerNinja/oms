@@ -30,7 +30,7 @@
                 Select a Person
             </label>
 
-            <select wire:model.live.debounce.500ms="selectedPerson" class="form-select">
+            <select name="customer_id" wire:model.live.debounce.500ms="selectedPerson" class="form-select">
                 <option value="">Select a person</option>
                 @foreach($customers as $id => $customer)
                     <option value="{{ $id }}" {{ $id == $selectedPerson ? 'selected' : '' }}
@@ -181,10 +181,20 @@
             </tr>
             <tr>
                 <th colspan="4" class="align-middle text-end">
-                    Discount
+                    Discount Breakdown
                 </th>
                 <td class="text-center">
-                    {{ Number::currency($discount, 'EUR') }}
+                    <ul class="list-unstyled">
+                        @if($discounts['seasonal_discount'] > 0)
+                            <li>Seasonal Discount (15%): {{ Number::currency($discounts['seasonal_discount'], 'EUR') }}</li>
+                        @endif
+                        @if($discounts['volume_discount'] > 0)
+                            <li>Volume Discount (10%): {{ Number::currency($discounts['volume_discount'], 'EUR') }}</li>
+                        @endif
+                        @if($discounts['loyalty_discount'] > 0)
+                            <li>Loyalty Discount (5%): {{ Number::currency($discounts['loyalty_discount'], 'EUR') }}</li>
+                        @endif
+                    </ul>
                 </td>
             </tr>
             <tr>
@@ -193,6 +203,7 @@
                 </th>
                 <td class="text-center">
                     {{ Number::currency($subtotal, 'EUR') }}
+                    <input type="hidden" name="sub_total" value="{{ $subtotal }}">
                 </td>
             </tr>
             <tr>

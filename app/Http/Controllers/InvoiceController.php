@@ -10,6 +10,7 @@ class InvoiceController extends Controller
 {
     public function create(StoreInvoiceRequest $request, Customer $customer)
     {
+        dd($request->all());
         $customer = Customer::query()
             ->where('id', $request->get('customer_id'))
             ->first();
