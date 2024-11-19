@@ -73,6 +73,7 @@
                             @include('inclues._sort-icon', ['field' => 'total'])
                         </a>
                     </th>
+                
                     <th scope="col" class="align-middle text-center">
                         <a wire:click.prevent="sortBy('order_status')" href="#" role="button">
                             {{ __('Status') }}
@@ -105,6 +106,7 @@
                     <td class="align-middle text-center">
                         {{ Number::currency($order->total, 'EUR') }}
                     </td>
+                   
                     <td class="align-middle text-center">
                         <x-status dot color="{{ $order->order_status === \App\Enums\OrderStatus::COMPLETE ? 'green' : 'orange' }}"
                                   class="text-uppercase"

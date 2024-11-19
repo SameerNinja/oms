@@ -25,7 +25,7 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-6">
                                         <div class="logo">
-                                            <h1>Name Store</h1>
+                                            <h1>NinjaTech</h1>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-sm-6">
@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="col-sm-6 text-end mb-50">
                                         <h4 class="inv-title-1">Store</h4>
-                                        <p class="inv-from-1">Name Store</p>
+                                        <p class="inv-from-1">NinjaTech</p>
                                         <p class="inv-from-1">(+62) 123 123 123</p>
                                         <p class="inv-from-1">email@example.com</p>
                                         <p class="inv-from-2">Cirebon, Jawa Barat, Indonesia</p>
@@ -111,13 +111,9 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="text-end">
-                                                    <strong>Tax</strong>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <strong>
-                                                        {{ Number::currency($order->vat, 'EUR') }}
-                                                    </strong>
+                                                <td colspan="3" class="text-end"><strong>Discount</strong></td>
+                                                <td class="text-center">
+                                                    <strong> {{ Number::currency($order->getTotalDiscountAttribute() ?? 0, 'EUR') }} </strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -130,6 +126,14 @@
                                                     </strong>
                                                 </td>
                                             </tr>
+                                            @if ($order->due > 0)
+                                            <tr style="background-color: yellow">
+                                                <td colspan="3" class="text-end"><strong>Due</strong></td>
+                                                <td class="text-center">
+                                                    <strong> {{ Number::currency($order->due ?? 0, 'EUR') }} </strong>
+                                                </td>
+                                            </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

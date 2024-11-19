@@ -34,11 +34,8 @@ class DueOrderController extends Controller
     {
         $order->loadMissing(['customer', 'details'])->get();
 
-        $customers = Customer::select(['id', 'name'])->get();
-
         return view('due.edit', [
             'order' => $order,
-            'customers' => $customers
         ]);
     }
 

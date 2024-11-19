@@ -66,7 +66,6 @@
                                 >
                             </div>
 
-                            {{---
                             <div class="col">
                                 <label for="customer" class="form-label required">
                                     {{ __('Customer') }}
@@ -78,16 +77,15 @@
                                        disabled
                                 >
                             </div>
-                            ---}}
 
-                            <x-tom-select
+                            {{-- <x-tom-select
                                 label="Customers"
                                 id="customer"
                                 name="customer"
                                 placeholder="Select Customer"
                                 :value="$order->customer->id"
                                 :data="$customers"
-                            />
+                            /> --}}
 
                             <div class="col">
                                 <label for="payment_type" class="form-label required">
@@ -145,12 +143,20 @@
                                     <td class="text-center">{{ number_format($order->pay, 2) }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" class="text-end">Due</td>
-                                    <td class="text-center">{{ number_format($order->due, 2) }}</td>
+                                    <td colspan="6" class="text-end">
+                                        Subtotal
+                                    </td>
+                                    <td class="text-center">{{ number_format($order->sub_total, 2) }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" class="text-end">VAT</td>
-                                    <td class="text-center">{{ number_format($order->vat, 2) }}</td>
+                                    <td colspan="6" class="text-end">
+                                        Discount
+                                    </td>
+                                    <td class="text-center">{{ number_format($order->getTotalDiscountAttribute(), 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="text-end">Due</td>
+                                    <td class="text-center">{{ number_format($order->due, 2) }}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="text-end">Total</td>

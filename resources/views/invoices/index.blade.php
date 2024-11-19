@@ -26,7 +26,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-sm-6">
                                     <div class="logo">
-                                        <h1>Name Store</h1>
+                                        <h1>NinjaTech</h1>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-6">
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-sm-6 text-end mb-50">
                                     <h4 class="inv-title-1">Store</h4>
-                                    <p class="inv-from-1">Name Store</p>
+                                    <p class="inv-from-1">NinjaTech</p>
                                     <p class="inv-from-1">(+62) 123 123 123</p>
                                     <p class="inv-from-1">email@example.com</p>
                                     <p class="inv-from-2">Cirebon, Jawa Barat, Indonesia</p>
@@ -73,6 +73,7 @@
                                             <th class="text-center">Price</th>
                                             <th class="text-center">Quantity</th>
                                             <th class="text-center">Subtotal</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -91,15 +92,15 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="text-end"><strong>Tax</strong></td>
+                                            <td colspan="3" class="text-end"><strong>Discount</strong></td>
                                             <td class="text-center">
-                                                <strong>{{ Cart::tax() }}</strong>
+                                                <strong> {{ $totalDiscountValue }} </strong>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="3" class="text-end"><strong>Total</strong></td>
                                             <td class="text-center">
-                                                <strong>{{ Cart::total() }}</strong>
+                                                <strong>{{ Cart::total() - $totalDiscountValue }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -143,12 +144,13 @@
                     <div class="modal-body">
                         <div class="modal-body">
                             <input type="hidden" name="customer_id" value="{{ $customer->id }}">
+                            <input type="hidden" name="discountsData" value="{{ !empty($discountsData) ? json_encode($discountsData) : '' }}">
                             <div class="mb-3">
                                 <!-- Form Group (type of product category) -->
                                 <label class="small mb-1" for="payment_type">Payment <span class="text-danger">*</span></label>
                                 <select class="form-control @error('payment_type') is-invalid @enderror" id="payment_type" name="payment_type">
                                     <option selected="" disabled="">Select a payment:</option>
-                                    <option value="HandCash">HandCash</option>
+                                    <option value="HandCash" selected>HandCash</option>
                                     <option value="Cheque">Cheque</option>
                                     <option value="Due">Due</option>
                                 </select>

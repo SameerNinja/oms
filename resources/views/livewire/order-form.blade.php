@@ -17,7 +17,6 @@
             value="{{ old('date') ?? now()->format('Y-m-d') }}" required
     >
 
-
             @error('date')
             <div class="invalid-feedback">
                 {{ $message }}
@@ -33,7 +32,7 @@
             <select name="customer_id" wire:model.live.debounce.500ms="selectedPerson" class="form-select">
                 <option value="">Select a person</option>
                 @foreach($customers as $id => $customer)
-                    <option value="{{ $id }}" {{ $id == $selectedPerson ? 'selected' : '' }}
+                    <option value="{{ $customer->id }}" {{ $customer->id == $selectedPerson ? 'selected' : '' }}
                     >{{ $customer->name }}</option>
                 @endforeach
             </select>
@@ -179,11 +178,12 @@
                     </button>
                 </td>
             </tr>
+            @if($discounts['total_discount'] > 0)
             <tr>
                 <th colspan="4" class="align-middle text-end">
                     Discount Breakdown
                 </th>
-                <td class="text-center">
+                <td class="text-center" style="max-width: 100px">
                     <ul class="list-unstyled">
                         @if($discounts['seasonal_discount'] > 0)
                             <li>Seasonal Discount (15%): {{ Number::currency($discounts['seasonal_discount'], 'EUR') }}</li>
@@ -196,7 +196,9 @@
                         @endif
                     </ul>
                 </td>
+                <input type="hidden" name="discountsData" value="{{ !empty($discounts['discountsData']) ? json_encode($discounts['discountsData']) : '' }}">
             </tr>
+            @endif
             <tr>
                 <th colspan="4" class="align-middle text-end">
                     Subtotal

@@ -18,11 +18,12 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->get();
-
-        return view('orders.index', [
-            'orders' => $orders,
-        ]);
+        $orders = Order::orderBy('created_at', 'desc') // Example: order by creation date descending
+        ->get();
+    // Calculate the total discount for each order
+    return view('orders.index', [
+        'orders' => $orders,
+    ]);
     }
 
     public function create()
@@ -38,10 +39,21 @@ class OrderController extends Controller
 
     public function store(OrderStoreRequest $request)
     {
-        $order = Order::create($request->all());
+        $discountsData = json_decode($request->get('discountsData'), true);
+        $totalDiscountValue = 0; // Default to 0 if $discountsData is empty or not an array
+        if (!empty($discountsData) && is_array($discountsData)) {
+            $totalDiscountValue = array_sum(array_column($discountsData, 'discount_value'));
+         }
+        $validateData = $request->all();
+        $validateData['total'] = Cart::instance('order')->total() - $totalDiscountValue;
+        if (!empty($totalDiscountValue)) {
+            $validateData['due'] -= $totalDiscountValue;
+        }
 
+        $order = Order::create($validateData);
         // Create Order Details
         $contents = Cart::instance('order')->content();
+
         $oDetails = [];
 
         foreach ($contents as $content) {
@@ -54,7 +66,23 @@ class OrderController extends Controller
 
             OrderDetails::insert($oDetails);
         }
+        if (!empty($discountsData)) {
+            $discounts = [];
+            foreach ($discountsData as $discount) {
+                $discounts[] = [
+                    'order_id' => $order->id,
+                    'discount_type' => $discount['discount_type'],
+                    'discount_value' => $discount['discount_value'],
+                    'discount_name' => $discount['discount_name'],
+                    'description' => $discount['description'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+            }
 
+            // Insert all discounts at once
+            DB::table('order_detail_discounts')->insert($discounts);
+        }
         // Delete Cart Sopping History
         Cart::destroy();
 
@@ -65,7 +93,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->loadMissing(['customer', 'details'])->get();
+        $order->loadMissing(['customer','orderDetailDiscounts', 'details'])->get();
 
         return view('orders.show', [
             'order' => $order,
