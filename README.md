@@ -12,6 +12,15 @@ A robust Inventory Management System built with **Laravel 10** and **MySQL**, de
 - **Products Management**
 - **Customer Records**
 - **Supplier Management**
+- **API's**
+  - Products
+  - Customers
+  - Orders
+  - Order Create
+  - Get Discount
+  - Order Pay
+  - Order Status Update
+  - Retrieve Order
 
 ## 🚀 Quick Start
 
@@ -77,6 +86,12 @@ Follow these steps to set up the project locally:
 
     - **Email:** `admin@admin.com`
     - **Password:** `password`
+
+## 🚀 API's
+
+1. **Import Json collection to postman:**
+
+    - `postman_collection file stored in public folder`
 
 ## 📄 License
 
