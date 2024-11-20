@@ -92,6 +92,3 @@ Follow these steps to set up the project locally:
 
     - `postman_collection.json file stored in public folder`
 
-## 📄 License
-
-Licensed under the [MIT License](LICENSE).
