@@ -91,7 +91,7 @@ Follow these steps to set up the project locally:
 
 1. **Import Json collection to postman:**
 
-    - `postman_collection file stored in public folder`
+    - `postman_collection.json file stored in public folder`
 
 ## 📄 License
 
