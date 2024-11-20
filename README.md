@@ -11,7 +11,6 @@ A robust Order Management System built with **Laravel 10** and **MySQL**, design
   - Pending Payments
 - **Products Management**
 - **Customer Records**
-- **Supplier Management**
 - **API's**
   - Products
   - Customers
