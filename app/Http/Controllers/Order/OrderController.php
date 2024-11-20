@@ -18,12 +18,11 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy('created_at', 'desc') // Example: order by creation date descending
-        ->get();
-    // Calculate the total discount for each order
-    return view('orders.index', [
-        'orders' => $orders,
-    ]);
+        $orders = Order::orderBy('created_at', 'desc')->get();
+
+        return view('orders.index', [
+            'orders' => $orders,
+        ]);
     }
 
     public function create()

@@ -22,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('products', [ProductController::class, 'index'])->name('api.product.index');
-Route::get('customer', [CustomerController::class, 'index'])->name('api.customer.index');
+Route::get('customers', [CustomerController::class, 'index'])->name('api.customer.index');
+Route::get('orders', [OrderController::class, 'getOrders'])->name('api.get.order');
 Route::post('order/create', [OrderController::class, 'createOrder'])->name('api.create.order');
-Route::get('order/{orderId}', [OrderController::class, 'retrieveOrder'])->name('api.create.order');
+Route::post('discount', [OrderController::class, 'discount'])->name('api.discount');
+Route::post('order/{orderId}/pay', [OrderController::class, 'payOrder'])->name('api.order.pay');
+Route::post('order/{orderId}/status', [OrderController::class, 'orderStatusUpdate'])->name('api.order.status.update');
+Route::get('order/{orderId}', [OrderController::class, 'retrieveOrder'])->name('api.retrieve.order');

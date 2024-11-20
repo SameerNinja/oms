@@ -48,17 +48,19 @@ class Order extends Model
     }
     public function discounts()
     {
-        return $this->hasMany(OrderDetailDiscount::class, 'id');
+        return $this->hasMany(OrderDetailDiscount::class);
     }
+
     public function orderDetailDiscounts()
     {
         return $this->hasMany(OrderDetailDiscount::class);
     }
+
     public function getTotalDiscountAttribute()
     {
-        // Sum the discount values from the related 'orderDetailDiscounts'
         return $this->orderDetailDiscounts->sum('discount_value') ?? 0;
     }
+
     public function scopeSearch($query, $value): void
     {
         $query->where('invoice_no', 'like', "%{$value}%")
