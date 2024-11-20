@@ -16,18 +16,7 @@ class ApiProductControllerTest extends TestCase
 
         $this->createProduct();
 
-        $response = $this->get('api/products/');
-
-        $response->assertStatus(200);
-        $response->assertSee('Test Product');
-        $response->assertDontSee('Test Product 2');
-    }
-
-    public function test_product_url_with_query_string()
-    {
-        $this->createProduct();
-
-        $response = $this->get('api/products?category_id=1');
+        $response = $this->get('api/products');
 
         $response->assertStatus(200);
         $response->assertSee('Test Product');

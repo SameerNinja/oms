@@ -120,9 +120,9 @@ class OrderController
 
             $order->loadMissing(['details', 'discounts']);
 
-            return response()->json($order);
+            return response()->json($order, 201);
         } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage()], $th->getCode());
+            return response()->json(['message' => $th->getMessage()], 500);
         }
     }
 
