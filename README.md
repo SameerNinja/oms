@@ -1,6 +1,6 @@
-# ✨ Inventory Management System
+# ✨ Order Management System with Dynamic Pricing
 
-A robust Inventory Management System built with **Laravel 10** and **MySQL**, designed to streamline your inventory tracking, sales, and purchasing processes.
+A robust Order Management System built with **Laravel 10** and **MySQL**, designed to streamline your inventory tracking, sales, and order processes.
 
 ## 🌟 Key Features
 
